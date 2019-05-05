@@ -27,16 +27,14 @@ app.use(express.json());
 app.use(express.static("public"));
 
 // Connect to the Mongo DB
-var MONGODB_URI = process.env.MONGODB_URI || "mongodb://localhost/mongoHeadlines";
-
-mongoose.connect(MONGODB_URI);
+mongoose.connect("mongodb://localhost/JobsScraper", { useNewUrlParser: true });
 
 // Routes
 
 // A GET route for scraping the echoJS website
 app.get("/scrape", function(req, res) {
   // First, we grab the body of the html with axios
-  axios.get("https://www.indeed.com/jobs?q=javascript+developer&l=Arlington%2C+VA").then(function(response) {
+  axios.get("http://www.echojs.com/").then(function(response) {
     // Then, we load that into cheerio and save it to $ for a shorthand selector
     var $ = cheerio.load(response.data);
 
