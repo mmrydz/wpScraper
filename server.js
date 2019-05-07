@@ -1,6 +1,7 @@
 var express = require("express");
 var logger = require("morgan");
 var mongoose = require("mongoose");
+var bodyParser = require("body-parser");
 
 // Our scraping tools
 // Axios is a promised-based http library, similar to jQuery's Ajax method
@@ -20,6 +21,9 @@ var app = express();
 
 // Use morgan logger for logging requests
 app.use(logger("dev"));
+app.use(bodyParser.urlencoded({
+  extended: false
+}));
 // Parse request body as JSON
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
@@ -28,12 +32,11 @@ app.use(express.static("public"));
 
 // Connect to the Mongo DB
 var MONGODB_URI = process.env.MONGODB_URI || "mongodb://localhost/wpScraper";
-
 mongoose.connect(MONGODB_URI);
-
+//mongodb://<dbuser>:<dbpassword>@ds261332.mlab.com:61332/heroku_5059qrnp
 // Routes
 
-// A GET route for scraping the echoJS website
+// A GET route for scraping the wp website
 app.get("/scrape", function(req, res) {
   // First, we grab the body of the html with axios
   axios.get("https://www.washingtonpost.com").then(function(response) {
